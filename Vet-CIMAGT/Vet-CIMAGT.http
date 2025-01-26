@@ -1,0 +1,6 @@
+@Vet_CIMAGT_HostAddress = http://localhost:5286
+
+GET {{Vet_CIMAGT_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
