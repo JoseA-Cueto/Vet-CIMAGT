@@ -12,12 +12,17 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Configurar Swagger (OpenAPI)
+builder.Services.AddEndpointsApiExplorer();  // Esto es necesario para usar Swagger
+builder.Services.AddSwaggerGen();  // Agregar el generador de Swagger
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();  // Habilitar Swagger en el entorno de desarrollo
+    app.UseSwaggerUI();  // Habilitar la interfaz de usuario de Swagger (UI)
 }
 
 app.UseHttpsRedirection();
