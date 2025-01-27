@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Vet_CIMAGT.Data;
-
+using Vet_CIMAGT.Mapping;
+using AutoMapper;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddControllers();
+
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 // Agregar configuración de base de datos
