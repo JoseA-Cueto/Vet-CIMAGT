@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Vet_CIMAGT.Core.DTOs;
 using Vet_CIMAGT.Core.Models;
-using Vet_CIMAGT.DataLayer.Repositorys.IClientRepository;
+using Vet_CIMAGT.DataLayer.Repositorys.Interface;
 using Vet_CIMAGT.Service.Service.Interface;
 
 namespace Vet_CIMAGT.Service.Service
@@ -17,30 +17,30 @@ namespace Vet_CIMAGT.Service.Service
             _mapper = mapper;
         }
 
-        public async Task DeleteArticleAsync(Guid id)
+        public async Task DeleteClientAsync(Guid id)
         {
             await _clientRepository.DeleteAsync(id);
         }
 
-        public async Task<List<ClientDTOs>> GetAllArticlesAsync()
+        public async Task<List<ClientDTOs>> GetAllClientsAsync()
         {
             var client = await _clientRepository.GetAllAsync();
             return _mapper.Map<List<ClientDTOs>>(client);
         }
 
-        public async Task<ClientDTOs> GetArticleByIdAsync(Guid id)
+        public async Task<ClientDTOs> GetClientByIdAsync(Guid id)
         {
             var client = await _clientRepository.GetByIdAsync(id);
             return _mapper.Map<ClientDTOs>(client);
         }
 
-        public async Task CreateArticleAsync(ClientDTOs clientDto)
+        public async Task CreateCLientAsync(ClientDTOs clientDto)
         {
             var client = _mapper.Map<Client>(clientDto);
             await _clientRepository.AddAsync(client);
         }
 
-        public async Task UpdateArticleAsync(Guid Id, ClientDTOs clientDto)
+        public async Task UpdateClientAsync(Guid Id, ClientDTOs clientDto)
         {
             var existingClient = await _clientRepository.GetByIdAsync(Id);
             await _clientRepository.UpdateAsync(existingClient);

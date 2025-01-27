@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Vet_CIMAGT.Data;
 using Vet_CIMAGT.Mapping;
 using AutoMapper;
+using Vet_CIMAGT.ServiceExtensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Configurar Swagger (OpenAPI)
 builder.Services.AddEndpointsApiExplorer();  // Esto es necesario para usar Swagger
 builder.Services.AddSwaggerGen();  // Agregar el generador de Swagger
-
+builder.Services.AddWebServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
