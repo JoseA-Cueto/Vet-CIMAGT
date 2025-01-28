@@ -64,20 +64,20 @@ namespace Vet_CIMAGT.Controllers
             catch (Exception ex)
             {
                
-                return StatusCode(500);
+                return StatusCode(500);// Devuelve un código de estado 500 en caso de error
             }
         }
 
-        [HttpPut("UpdateClient/{id}")]
+        [HttpPut("UpdateClient")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateClient(Guid id, [FromBody] ClientDTOs clientDTOs)
+        public async Task<IActionResult> UpdateClient(  ClientDTOs clientDTOs)
         {
             try
             {
           
-                await _clientService.UpdateClientAsync(id,clientDTOs);
+                await _clientService.UpdateClientAsync(clientDTOs);
                 return Ok();
             }
             catch (Exception ex)
@@ -95,9 +95,7 @@ namespace Vet_CIMAGT.Controllers
         public async Task<IActionResult> DeleteClient(Guid id)
         {
             try
-            {
-               
-
+            {             
                 await _clientService.DeleteClientAsync(id);
                 return Ok();
             }

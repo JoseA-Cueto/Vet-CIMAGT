@@ -8,7 +8,7 @@ namespace Vet_CIMAGT.Service.Service.Interface
         Task<List<ClientDTOs>> GetAllClientsAsync();
         Task<ClientDTOs> GetClientByIdAsync(Guid id);
         Task CreateCLientAsync(ClientDTOs clientDTOs);
-        Task UpdateClientAsync(Guid Id, ClientDTOs clientDTOs);
+        Task UpdateClientAsync(ClientDTOs clientDTOs);
         Task DeleteClientAsync(Guid id);
     }
 }

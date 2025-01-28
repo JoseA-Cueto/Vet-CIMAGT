@@ -19,31 +19,96 @@ namespace Vet_CIMAGT.Service.Service
 
         public async Task DeleteClientAsync(Guid id)
         {
-            await _clientRepository.DeleteAsync(id);
+            try
+            {
+                var existingClient = await _clientRepository.GetByIdAsync(id);
+
+                if (existingClient == null)
+                {
+                    throw new Exception("El cliente no existe.");
+                }
+
+                await _clientRepository.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al eliminar el cliente: {ex.Message}");
+            }
         }
 
         public async Task<List<ClientDTOs>> GetAllClientsAsync()
         {
-            var client = await _clientRepository.GetAllAsync();
-            return _mapper.Map<List<ClientDTOs>>(client);
+            try
+            {
+                var clients = await _clientRepository.GetAllAsync();
+
+                if (clients == null || !clients.Any())
+                {
+                    throw new Exception("No se encontraron clientes.");
+                }
+
+                return _mapper.Map<List<ClientDTOs>>(clients);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener los clientes: {ex.Message}");
+            }
         }
 
         public async Task<ClientDTOs> GetClientByIdAsync(Guid id)
         {
-            var client = await _clientRepository.GetByIdAsync(id);
-            return _mapper.Map<ClientDTOs>(client);
+            try
+            {
+                var client = await _clientRepository.GetByIdAsync(id);
+
+                if (client == null)
+                {
+                    throw new Exception("El cliente no existe.");
+                }
+
+                return _mapper.Map<ClientDTOs>(client);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener el cliente: {ex.Message}");
+            }
         }
 
         public async Task CreateCLientAsync(ClientDTOs clientDto)
         {
-            var client = _mapper.Map<Client>(clientDto);
-            await _clientRepository.AddAsync(client);
+            try
+            {
+                var client = _mapper.Map<Client>(clientDto);
+                await _clientRepository.AddAsync(client);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al crear el cliente: {ex.Message}");
+            }
         }
 
-        public async Task UpdateClientAsync(Guid Id, ClientDTOs clientDto)
+        public async Task UpdateClientAsync(ClientDTOs clientDto)
         {
-            var existingClient = await _clientRepository.GetByIdAsync(Id);
-            await _clientRepository.UpdateAsync(existingClient);
+            try
+            {
+                var existingClient = await _clientRepository.GetByIdAsync(clientDto.Id);
+
+                if (existingClient == null)
+                {
+                    throw new Exception("El cliente no existe.");
+                }
+
+              
+                _mapper.Map(clientDto, existingClient);
+
+              
+                await _clientRepository.UpdateAsync(existingClient);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al actualizar el cliente: {ex.Message}");
+            }
         }
     }
 }
+
