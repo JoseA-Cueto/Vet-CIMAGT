@@ -10,8 +10,10 @@ namespace Vet_CIMAGT.ServiceExtensions
         public static void AddWebServices(this IServiceCollection services)
         {
             services.AddScoped<IClientRepository, ClientRepository>();
-
             services.AddScoped<IClientService, ClientService>();
+
+            services.AddScoped<IConsumptionRepository, ConsumptionRepository>();
+            services.AddScoped<IConsumptionService, ConsumptionService>();
         }
     }
 }
