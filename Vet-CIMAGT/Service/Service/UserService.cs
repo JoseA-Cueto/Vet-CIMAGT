@@ -127,19 +127,20 @@ namespace Vet_CIMAGT.Service.Service
         {
             try
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                // Utilizar el nuevo nombre de clave para obtener la clave secreta
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var claims = new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                    new Claim("id", user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
+            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+            new Claim("id", user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
 
                 var token = new JwtSecurityToken(
-                    _configuration["Jwt:Issuer"],
-                    _configuration["Jwt:Issuer"],
+                    _configuration["JwtSettings:Issuer"],
+                    _configuration["JwtSettings:Issuer"],
                     claims,
                     expires: DateTime.UtcNow.AddHours(2),
                     signingCredentials: creds
@@ -152,6 +153,7 @@ namespace Vet_CIMAGT.Service.Service
                 throw new Exception($"Error al generar el token JWT: {ex.Message}");
             }
         }
+
     }
 }
 

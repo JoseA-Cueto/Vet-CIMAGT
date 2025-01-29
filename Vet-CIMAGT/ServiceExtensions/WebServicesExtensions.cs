@@ -9,6 +9,7 @@ namespace Vet_CIMAGT.ServiceExtensions
     {
         public static void AddWebServices(this IServiceCollection services)
         {
+            // Otros servicios existentes
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IClientService, ClientService>();
 
@@ -20,6 +21,11 @@ namespace Vet_CIMAGT.ServiceExtensions
 
             services.AddScoped<IProcedureRepository, ProcedureRepository>();
             services.AddScoped<IProcedureService, ProcedureService>();
+
+            // Inyección de dependencias para User
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }
+
