@@ -13,6 +13,7 @@ namespace Vet_CIMAGT.Data
         public DbSet<Consumption> Consumptions { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Procedure> Procedures { get; set; }
+        public DbSet<User> Users { get; set; }
 
 
     }

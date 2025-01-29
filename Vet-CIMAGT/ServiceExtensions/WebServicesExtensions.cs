@@ -17,6 +17,9 @@ namespace Vet_CIMAGT.ServiceExtensions
 
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IPatientService, PatientService>();
+
+            services.AddScoped<IProcedureRepository, ProcedureRepository>();
+            services.AddScoped<IProcedureService, ProcedureService>();
         }
     }
 }

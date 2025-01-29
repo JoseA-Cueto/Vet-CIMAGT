@@ -1,38 +1,71 @@
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Vet_CIMAGT.Data;
 using Vet_CIMAGT.Mapping;
-using AutoMapper;
 using Vet_CIMAGT.ServiceExtensions;
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 1?? Agregar configuración de AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// 2?? Configurar servicios de controladores
 builder.Services.AddControllers();
 
+// 3?? Configurar Swagger (documentación de API)
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-// Agregar configuración de base de datos
+// 4?? Configurar conexión a la base de datos
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configurar Swagger (OpenAPI)
-builder.Services.AddEndpointsApiExplorer();  // Esto es necesario para usar Swagger
-builder.Services.AddSwaggerGen();  // Agregar el generador de Swagger
+// 5?? Configurar autenticación con JWT
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = true;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            ValidateLifetime = true
+        };
+    });
+
+// 6?? Agregar autorización
+builder.Services.AddAuthorization();
+
+// 7?? Registrar servicios personalizados (Extensiones de servicio)
 builder.Services.AddWebServices();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 8?? Configurar middleware
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();  // Habilitar Swagger en el entorno de desarrollo
-    app.UseSwaggerUI();  // Habilitar la interfaz de usuario de Swagger (UI)
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
+// 9?? Habilitar autenticación y autorización
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();
+
