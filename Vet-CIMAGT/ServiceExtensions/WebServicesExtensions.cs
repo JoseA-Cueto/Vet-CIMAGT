@@ -14,6 +14,9 @@ namespace Vet_CIMAGT.ServiceExtensions
 
             services.AddScoped<IConsumptionRepository, ConsumptionRepository>();
             services.AddScoped<IConsumptionService, ConsumptionService>();
+
+            services.AddScoped<IPatientRepository, PatientRepository>();
+            services.AddScoped<IPatientService, PatientService>();
         }
     }
 }
