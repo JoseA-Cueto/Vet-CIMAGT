@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -10,21 +9,21 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1?? Agregar configuraci�n de AutoMapper
+// 1️⃣ Agregar configuración de AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-// 2?? Configurar servicios de controladores
+// 2️⃣ Configurar servicios de controladores
 builder.Services.AddControllers();
 
-// 3?? Configurar Swagger (documentaci�n de API)
+// 3️⃣ Configurar Swagger (documentación de API)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 4?? Configurar conexi�n a la base de datos
+// 4️⃣ Configurar conexión a la base de datos
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 5?? Configurar autenticaci�n con JWT
+// 5️⃣ Configurar autenticación con JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]);
 
@@ -45,15 +44,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// 6?? Agregar autorizaci�n
+// 6️⃣ Agregar autorización
 builder.Services.AddAuthorization();
 
-// 7?? Registrar servicios personalizados (Extensiones de servicio)
+// 7️⃣ Registrar servicios personalizados (Extensiones de servicio)
 builder.Services.AddWebServices();
+
+// 8️⃣ Habilitar CORS para permitir acceso desde Angular
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularClient",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") 
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        });
+});
 
 var app = builder.Build();
 
-// 8?? Configurar middleware
+// 9️⃣ Configurar middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -62,10 +74,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// 9?? Habilitar autenticaci�n y autorizaci�n
+// 1️⃣0️⃣ Usar CORS
+app.UseCors("AllowAngularClient");
+
+// 1️⃣1️⃣ Habilitar autenticación y autorización
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
+
 
