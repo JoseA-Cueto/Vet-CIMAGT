@@ -50,18 +50,23 @@ builder.Services.AddAuthorization();
 // 7️⃣ Registrar servicios personalizados (Extensiones de servicio)
 builder.Services.AddWebServices();
 
-// 8️⃣ Habilitar CORS para permitir acceso desde Angular
+// Agregar servicios CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularClient",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:4200") 
-                  .AllowAnyMethod()
-                  .AllowAnyHeader()
-                  .AllowCredentials();
-        });
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin() // Permite cualquier origen (en desarrollo)
+              .AllowAnyMethod() // Permite cualquier método (GET, POST, etc.)
+              .AllowAnyHeader(); // Permite cualquier cabecera
+    });
 });
+
+// Leer los puertos desde appsettings.json
+var httpPort = builder.Configuration["AppSettings:Ports:Http"];
+var httpsPort = builder.Configuration["AppSettings:Ports:Https"];
+
+// Fijar los puertos
+builder.WebHost.UseUrls($"http://localhost:{httpPort}", $"https://localhost:{httpsPort}");
 
 var app = builder.Build();
 
@@ -75,7 +80,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // 1️⃣0️⃣ Usar CORS
-app.UseCors("AllowAngularClient");
+app.UseCors("AllowAllOrigins");
 
 // 1️⃣1️⃣ Habilitar autenticación y autorización
 app.UseAuthentication();
