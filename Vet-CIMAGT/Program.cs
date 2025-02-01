@@ -6,6 +6,7 @@ using Vet_CIMAGT.Mapping;
 using Vet_CIMAGT.ServiceExtensions;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // 2️⃣ Configurar servicios de controladores
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true; // Ignorar mayúsculas/minúsculas
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull; // Ignorar propiedades nulas
+    });
 
 // 3️⃣ Configurar Swagger (documentación de API)
 builder.Services.AddEndpointsApiExplorer();

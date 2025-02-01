@@ -18,9 +18,6 @@ namespace Vet_CIMAGT.Mapping
             CreateMap<User, UserDTOs>().ReverseMap();
             CreateMap<UserCreateDTO, User>().ReverseMap();  // Para la creación de usuarios
             CreateMap<UserUpdateDTO, User>().ReverseMap();  // Para la actualización de usuarios
-
-            // Si es necesario el mapeo de LoginDTO
-            // Pero generalmente no se mapea, solo se usa para el login
             CreateMap<LoginDTO, User>().ReverseMap();  // No necesariamente se necesita, pero se incluye si tienes algún caso especial
         }
     }

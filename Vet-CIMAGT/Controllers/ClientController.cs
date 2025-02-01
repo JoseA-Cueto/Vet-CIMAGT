@@ -54,7 +54,7 @@ namespace Vet_CIMAGT.Controllers
         [HttpPost("AddClient")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddClient([FromForm] ClientDTOs clientDTOs)
+        public async Task<IActionResult> AddClient([FromBody] ClientDTOs clientDTOs)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Vet_CIMAGT.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateClient(  ClientDTOs clientDTOs)
+        public async Task<IActionResult> UpdateClient([FromBody] ClientDTOs clientDTOs)
         {
             try
             {
