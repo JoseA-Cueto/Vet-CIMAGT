@@ -78,7 +78,7 @@ namespace Vet_CIMAGT.Service.Service
         {
             try
             {
-                var client = _mapper.Map<Client>(clientDto);
+                    var client = _mapper.Map<Client>(clientDto);
                 await _clientRepository.AddAsync(client);
             }
             catch (Exception ex)
